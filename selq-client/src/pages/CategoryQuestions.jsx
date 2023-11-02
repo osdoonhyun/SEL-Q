@@ -4,13 +4,13 @@ import { LinkContainer } from 'react-router-bootstrap';
 import CategoryCarousel from '../components/ui/CategoryCarousel';
 import { useFontSize } from '../context/FontSizingProvider';
 import { QuestionQ, QuestionTitle } from '../styles/Styles';
-import { useAllQuestionsQuery } from '../services/api';
+import { useGetQuestions } from '../hooks/queries/useGetQuestions';
 
 export default function CategoryQuestions() {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const { fontSizing, calcFontSize } = useFontSize();
 
-  const { data: questions } = useAllQuestionsQuery();
+  const { data: questions } = useGetQuestions();
 
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
@@ -44,7 +44,7 @@ export default function CategoryQuestions() {
               </QuestionQ>
               <QuestionTitle
                 size={calcFontSize('1.6rem', fontSizing)}
-                mb='0.5rem'
+                mbottom='0.5rem'
                 cursor={'pointer'}
               >
                 {question.question}

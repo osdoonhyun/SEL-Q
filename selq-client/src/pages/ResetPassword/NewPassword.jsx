@@ -3,20 +3,26 @@ import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { ErrorMessage } from '../../styles/Styles';
+import { MAIN, GREYS } from '../../styles/variables';
+import { MESSAGE } from '../../constant/message';
+import { REGEXP } from '../../constant/regexp';
 
 const newPasswordSchema = yup.object({
   password: yup
     .string()
-    .required('새 비밀번호를 입력해 주세요.')
-    .min(8, '8자 이상 입력해 주세요.')
+    .required(MESSAGE.RESET_PASSWORD.VALIDATION_PASSWORD)
+    .min(8, MESSAGE.RESET_PASSWORD.VALIDATION_PASSWORD_MIN)
     .matches(
-      /^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>])(?=.*[0-9]).{8,}$/,
-      '최소 하나의 대문자, 특수문자, 숫자를 포함해야 합니다.'
+      REGEXP.PASSWORD,
+      MESSAGE.RESET_PASSWORD.VALIDATION_PASSWORD_MATCHES
     ),
   confirmPassword: yup
     .string()
-    .oneOf([yup.ref('password'), null], '비밀번호가 일치하지 않습니다.')
-    .required('새 비밀번호 확인을 입력해 주세요.'),
+    .oneOf(
+      [yup.ref('password'), null],
+      MESSAGE.RESET_PASSWORD.VALIDATION_CONFIRM_PASSWORD
+    )
+    .required(MESSAGE.RESET_PASSWORD.VALIDATION_CONFIRM_PASSWORD_REQUIRED),
 });
 
 export default function NewPassword() {
@@ -87,9 +93,9 @@ export default function NewPassword() {
             height: '55px',
             width: '330px',
             padding: '15px 10px',
-            backgroundColor: '#2f93ea',
-            border: '1px solid #2f93ea',
-            color: '#fff',
+            backgroundColor: MAIN.DARK,
+            border: `1px solid ${MAIN.DARK}`,
+            color: GREYS.LIGHTER,
           }}
           type='submit'
         >

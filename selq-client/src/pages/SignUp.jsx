@@ -2,38 +2,41 @@ import { Container, Form, Row, Col, Button, Spinner } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import { TERMS_AND_CONDITIONS, EMAIL_LIST } from '../constant/signUp';
 import { useNavigate } from 'react-router-dom';
-import {
-  useSignUpHandler,
-  useVerifyRegisteredEmail,
-  useSendEmailVerification,
-  useCheckEmailVerification,
-} from '../services/authHook/signUp';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { ErrorMessage } from '../styles/Styles';
 import Timer from '../components/ui/Timer';
-import SocialGoogleLogIn from '../components/common/SocialGoogleLogIn';
+import SocialLogInButton from '../components/common/SocialLogInButton';
+import { MAIN, GREYS } from '../styles/variables';
+import { useSignUpHandler } from '../hooks/common/useSignUpHandler';
+import { useCheckRegisteredEmail } from '../hooks/common/useCheckRegisteredEmail';
+import { useSendVerificationCode } from '../hooks/common/useSendVerificationCode';
+import { useCheckVerificationCode } from '../hooks/common/useCheckVerificationCode';
+import { REGEXP } from '../constant/regexp';
+import { MESSAGE } from '../constant/message';
 
 const signUpSchema = yup.object().shape({
-  email: yup.string().required('이메일을 입력해 주세요.'),
-  emailCategory: yup.string().required('이메일 카테고리를 선택해 주세요.'),
+  email: yup.string().required(MESSAGE.SIGNUP.VALIDATION_EMAIL),
+  emailCategory: yup
+    .string()
+    .required(MESSAGE.SIGNUP.VALIDATION_EMAIL_CATEGORY),
   password: yup
     .string()
-    .required('새 비밀번호를 입력해 주세요.')
-    .min(8, '8자 이상 입력해 주세요.')
-    .matches(
-      /^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/,
-      '최소 하나의 대문자, 특수문자를 포함해야 합니다.'
-    ),
+    .required(MESSAGE.SIGNUP.VALIDATION_PASSWORD)
+    .min(8, MESSAGE.SIGNUP.VALIDATION_PASSWORD_MIN)
+    .matches(REGEXP.PASSWORD, MESSAGE.SIGNUP.VALIDATION_PASSWORD_MATCHES),
   confirmPassword: yup
     .string()
-    .oneOf([yup.ref('password'), null], '비밀번호가 일치하지 않습니다.')
-    .required('새 비밀번호 확인을 입력해 주세요.'),
+    .oneOf(
+      [yup.ref('password'), null],
+      MESSAGE.SIGNUP.VALIDATION_CONFIRM_PASSWORD
+    )
+    .required(MESSAGE.SIGNUP.VALIDATION_CONFIRM_PASSWORD_REQUIRED),
   username: yup
     .string()
-    .min(2, '최소 2글자 이상 입력해 주세요.')
-    .max(15, '최대 15글자까지 입력 가능합니다.'),
+    .min(2, MESSAGE.SIGNUP.VALIDATION_USERNAME_MIN)
+    .max(15, MESSAGE.SIGNUP.VALIDATION_USERNAME_MAX),
   fourteenOverAgree: yup.bool().oneOf([true]),
   termsOfUseAgree: yup.bool().oneOf([true]),
   personalInfoAgree: yup.bool().oneOf([true]),
@@ -72,19 +75,19 @@ export default function SignUp() {
     mutateAsync: verifyEmail,
     isLoading: loadingVerifyEmail,
     error: errorVerifyEmail,
-  } = useVerifyRegisteredEmail();
+  } = useCheckRegisteredEmail();
 
   const {
     mutateAsync: sendEmail,
     isLoading: loadingSendEmail,
     error: errorSendEmail,
-  } = useSendEmailVerification();
+  } = useSendVerificationCode();
 
   const {
     mutateAsync: checkEmail,
     isLoading: loadingCheckEmail,
     error: errorCheckEmail,
-  } = useCheckEmailVerification();
+  } = useCheckVerificationCode();
 
   const signUpHandler = async (values, e) => {
     e.preventDefault();
@@ -113,7 +116,7 @@ export default function SignUp() {
     const response = await verifyEmail(userEmail);
 
     if (response === true) {
-      alert('이미 가입된 이메일입니다.');
+      alert(MESSAGE.SIGNUP.VERIFY_REGISTERED_EMAIL);
       return;
     } else {
       await sendEmail(userEmail);
@@ -138,14 +141,14 @@ export default function SignUp() {
       setIsVerifiedEmail(false);
       setVerificationBtnDisable(false);
     } else {
-      alert('다시 인증 코드를 입력해 주세요');
+      alert(MESSAGE.SIGNUP.VERIFY_EMAIL_CODE);
     }
   };
 
   const handleAgreeCheckList = (e, field, setFieldValue) => {
     const { value, checked } = e.target;
 
-    if (value === '전체 동의') {
+    if (value === MESSAGE.SIGNUP.TOTAL_AGREE) {
       let tempAgree = agreeList.map((agree) => ({
         ...agree,
         isChecked: checked,
@@ -190,7 +193,7 @@ export default function SignUp() {
             SNS 계정으로 간편하게 회원가입
           </Row>
           <Row className='justify-content-center mt-2 mb-4 mx-1'>
-            <SocialGoogleLogIn />
+            <SocialLogInButton />
           </Row>
         </Form.Group>
         <hr />
@@ -233,9 +236,9 @@ export default function SignUp() {
             alignItems: 'center',
             width: '127px',
             height: '38px',
-            backgroundColor: '#2f93ea',
-            border: '1px solid #2f93ea',
-            color: '#fff',
+            backgroundColor: MAIN.DARK,
+            border: `1px solid ${MAIN.DARK}`,
+            color: GREYS.LIGHTER,
           }}
           onClick={verifyRegisteredEmailHandler}
           className='mb-3'
@@ -268,13 +271,13 @@ export default function SignUp() {
               onChange={(e) => setVerificationCode(e.target.value)}
             />
             <div>
-              <Form.Text style={{ color: '#828C94' }}>
+              <Form.Text style={{ color: GREYS.DARK }}>
                 이메일을 받지 못하셨나요?{` `}
                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                 <a
                   href='#'
                   onClick={handleResendEmail}
-                  style={{ color: '#828C94' }}
+                  style={{ color: GREYS.DARK }}
                 >
                   이메일 재전송하기
                 </a>
@@ -286,9 +289,9 @@ export default function SignUp() {
               className='mt-3'
               variant='Light'
               style={{
-                backgroundColor: '#2f93ea',
-                border: '1px solid #2f93ea',
-                color: '#fff',
+                backgroundColor: MAIN.DARK,
+                border: `1px solid ${MAIN.DARK}`,
+                color: GREYS.LIGHTER,
               }}
               onClick={checkEmailVerificationHandler}
             >
@@ -351,7 +354,7 @@ export default function SignUp() {
           <Form.Label>약관 동의</Form.Label>
           <div
             style={{
-              border: '1px solid #B3B3B5',
+              border: `1px solid ${GREYS.MEDIUM}`,
               padding: '18px',
               borderRadius: '5px',
             }}
@@ -401,9 +404,9 @@ export default function SignUp() {
         <Button
           variant='Light'
           style={{
-            backgroundColor: '#2f93ea',
-            border: '1px solid #2f93ea',
-            color: '#fff',
+            backgroundColor: MAIN.DARK,
+            border: `1px solid ${MAIN.DARK}`,
+            color: GREYS.LIGHTER,
           }}
           type='submit'
           className='w-100 mt-3'
@@ -426,7 +429,7 @@ export default function SignUp() {
 
       <p className='mt-3' style={{ textAlign: 'center' }}>
         이미 아이디가 있으신가요?{' '}
-        <a style={{ color: '#2f93ea' }} href='/login'>
+        <a style={{ color: MAIN.DARK }} href='/login'>
           로그인
         </a>
       </p>

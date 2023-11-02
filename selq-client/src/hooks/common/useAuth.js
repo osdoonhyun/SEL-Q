@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUserInfo } from '../store/Slices/auth';
-// import { getUserInfo } from '../../store/slices/auth';
+import { getUserInfo } from '../../store/Slices/auth';
 
 export default function useAuth() {
   const dispatch = useDispatch();

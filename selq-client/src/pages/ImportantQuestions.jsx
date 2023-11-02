@@ -14,9 +14,10 @@ import {
 import { LinkContainer } from 'react-router-bootstrap';
 import { useFontSize } from '../context/FontSizingProvider';
 import { QuestionQ, QuestionTitle } from '../styles/Styles';
-import { useFilteredQuestionQuery } from '../services/api';
 import Pagination from '../components/common/Pagination';
 import { IMPORTANCE_FILTER_OPTION } from '../constant/filters';
+import { MAIN, GREYS } from '../styles/variables';
+import { useGetQuestionsByFilteringOption } from '../hooks/queries/useGetQuestionsByFilteringOption';
 
 export default function ImportantQuestions() {
   const { fontSizing, calcFontSize } = useFontSize();
@@ -30,7 +31,7 @@ export default function ImportantQuestions() {
     data: importantQuestions,
     loading,
     error,
-  } = useFilteredQuestionQuery(currentPage, selectedFilterOption);
+  } = useGetQuestionsByFilteringOption(currentPage, selectedFilterOption);
 
   const handleImportanceClick = (label, options) => {
     const updatedOptions = options
@@ -146,12 +147,12 @@ export default function ImportantQuestions() {
         {Object.keys(selectedFilterOption).map((label, index) =>
           selectedFilterOption[label].map((option, optionIndex) => (
             <Badge
-              bg='#5bacee'
+              bg={MAIN.MEDIUM}
               style={{
                 fontSize: '0.8rem',
-                color: '#fff',
+                color: GREYS.LIGHTER,
                 letterSpacing: '0.1rem',
-                backgroundColor: '#5bacee',
+                backgroundColor: MAIN.MEDIUM,
               }}
               key={optionIndex}
               className='d-flex justify-content-center align-items-center '
@@ -195,7 +196,7 @@ export default function ImportantQuestions() {
             >
               <QuestionTitle
                 size={calcFontSize('1.6rem', fontSizing)}
-                mb='0.5rem'
+                mbottom='0.5rem'
                 cursor={'pointer'}
               >
                 {question.question}

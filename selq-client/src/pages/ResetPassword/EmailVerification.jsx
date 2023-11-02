@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Button, Col, Form, Row, Spinner } from 'react-bootstrap';
-import {
-  useSendEmailVerification,
-  useVerifyRegisteredEmail,
-} from '../../services/authHook/signUp';
+
 import { Controller, useForm } from 'react-hook-form';
+import { MAIN, GREYS } from '../../styles/variables';
+import { useCheckRegisteredEmail } from '../../hooks/common/useCheckRegisteredEmail';
+import { useSendVerificationCode } from '../../hooks/common/useSendVerificationCode';
 
 export default function EmailVerification({ onNext }) {
   const [checkBtnDisable, setCheckBtnDisable] = useState(true);
@@ -16,13 +16,13 @@ export default function EmailVerification({ onNext }) {
     mutateAsync: verifyEmail,
     isLoading: loadingVerifyEmail,
     error: errorVerifyEmail,
-  } = useVerifyRegisteredEmail();
+  } = useCheckRegisteredEmail();
 
   const {
     mutateAsync: sendEmail,
     isLoading: loadingSendEmail,
     error: errorSendEmail,
-  } = useSendEmailVerification();
+  } = useSendVerificationCode();
 
   const handleCheckButton = async () => {
     const inputEmail = getValues('email');
@@ -83,9 +83,9 @@ export default function EmailVerification({ onNext }) {
                 onClick={handleCheckButton}
                 variant='Light'
                 style={{
-                  backgroundColor: '#2f93ea',
-                  border: '1px solid #2f93ea',
-                  color: '#fff',
+                  backgroundColor: MAIN.DARK,
+                  border: `1px solid ${MAIN.DARK}`,
+                  color: GREYS.LIGHTER,
                 }}
                 disabled={checkBtnDisable}
               >
@@ -113,9 +113,9 @@ export default function EmailVerification({ onNext }) {
         <Button
           variant='Light'
           style={{
-            backgroundColor: '#2f93ea',
-            border: '1px solid #2f93ea',
-            color: '#fff',
+            backgroundColor: MAIN.DARK,
+            border: `1px solid ${MAIN.DARK}`,
+            color: GREYS.LIGHTER,
           }}
           className='mt-3 w-100'
           type='submit'

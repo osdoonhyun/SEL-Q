@@ -6,12 +6,14 @@ import {
   EmailForm,
   DeleteForm,
 } from '../components/common/ResponsiveForm';
-import { useUpdateUser } from '../services/authHook/getUsers';
+
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import useAuth from '../hooks/useAuth';
+import useAuth from '../hooks/common/useAuth';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { MAIN, GREYS } from '../styles/variables';
+import { useUpdateUserInfoByUser } from '../hooks/common/useUpdateUserInfoByUser';
 
 const usernameSchema = yup
   .object({
@@ -33,7 +35,7 @@ export default function MyPage() {
     mutateAsync: updateUser,
     isLoading: loadingUpdateUser,
     error: errorUpdateUser,
-  } = useUpdateUser();
+  } = useUpdateUserInfoByUser();
 
   const {
     handleSubmit,
@@ -90,9 +92,9 @@ export default function MyPage() {
               variant='Light'
               style={{
                 width: '280px',
-                backgroundColor: '#2f93ea',
-                border: '1px solid #2f93ea',
-                color: '#fff',
+                backgroundColor: MAIN.DARK,
+                border: `1px solid ${MAIN.DARK}`,
+                color: GREYS.LIGHTER,
               }}
               type='submit'
               className='mt-5'

@@ -6,15 +6,16 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { ErrorMessage } from '../../styles/Styles';
 import * as yup from 'yup';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useSignUpHandler } from '../../services/authHook/signUp';
-import { useDispatch } from 'react-redux';
-import { logIn } from '../../store/Slices/auth';
+import { MAIN, GREYS } from '../../styles/variables';
+import { useSignUpHandler } from '../../hooks/common/useSignUpHandler';
+import { serverApi } from '../../apis/api';
+import { MESSAGE } from '../../constant/message';
 
 const signUpSchema = yup.object().shape({
   username: yup
     .string()
-    .min(2, '최소 2글자 이상 입력해 주세요.')
-    .max(15, '최대 15글자까지 입력 가능합니다.'),
+    .min(2, MESSAGE.SIGNUP.VALIDATION_USERNAME_MIN)
+    .max(15, MESSAGE.SIGNUP.VALIDATION_USERNAME_MAX),
   fourteenOverAgree: yup.bool().oneOf([true]),
   termsOfUseAgree: yup.bool().oneOf([true]),
   personalInfoAgree: yup.bool().oneOf([true]),
@@ -24,7 +25,6 @@ export default function SocialSignUp() {
   const [agreeList, setAgreeList] = useState(TERMS_AND_CONDITIONS);
   const navigate = useNavigate();
   const location = useLocation();
-  const dispatch = useDispatch();
 
   const {
     handleSubmit,
@@ -42,7 +42,8 @@ export default function SocialSignUp() {
     error: errorSignUp,
   } = useSignUpHandler();
 
-  const userInfo = location.state.userInfo;
+  const userInfo = location.state.userInfo?.userInfo;
+  const accessToken = location.state.token;
 
   const handleAgreeCheckList = (e, field, setFieldValue) => {
     const { value, checked } = e.target;
@@ -74,9 +75,9 @@ export default function SocialSignUp() {
     const allTrue = values.allTrue;
     const signUpInfo = {
       username: values.username,
-      email: userInfo?.email,
-      profileImg: userInfo.picture || '',
-      provider: 'google',
+      // email: userInfo?.email,
+      // profileImg: userInfo.picture || '',
+      // provider: 'google',
 
       fourteenOverAgree: allTrue || !!values.fourteenOverAgree,
       termsOfUseAgree: allTrue || !!values.termsOfUseAgree,
@@ -86,9 +87,24 @@ export default function SocialSignUp() {
     };
 
     // TODO: 회원가입시 비밀번호 없는 상태로 요청
-    // await signUp(signUpInfo);
-    // await dispatch(logIn({ email: userInfo?.email }));
-    // navigate('/');
+    const config = {
+      headers: {
+        Authorization: 'Bearer ' + accessToken,
+      },
+    };
+
+    try {
+      const { status } = await serverApi.patch(
+        '/auth/update',
+        signUpInfo,
+        config
+      );
+      if (status === 200) {
+        navigate('/');
+      }
+    } catch (error) {
+      console.log('소셜 로그인(회원가입) 에러 발생');
+    }
   };
 
   return (
@@ -117,7 +133,7 @@ export default function SocialSignUp() {
             {...register('username', { required: true })}
             type='text'
             placeholder='별명 (2~15자)'
-            defaultValue={userInfo?.name || ''}
+            defaultValue={userInfo?.username || ''}
           />
           <ErrorMessage>{errors.username?.message}</ErrorMessage>
         </Form.Group>
@@ -126,7 +142,7 @@ export default function SocialSignUp() {
           <Form.Label>약관 동의</Form.Label>
           <div
             style={{
-              border: '1px solid #B3B3B5',
+              border: `1px solid ${GREYS.MEDIUM}`,
               padding: '18px',
               borderRadius: '5px',
             }}
@@ -176,9 +192,9 @@ export default function SocialSignUp() {
         <Button
           variant='Light'
           style={{
-            backgroundColor: '#2f93ea',
-            border: '1px solid #2f93ea',
-            color: '#fff',
+            backgroundColor: MAIN.DARK,
+            border: `1px solid ${MAIN.DARK}`,
+            color: GREYS.LIGHTER,
           }}
           type='submit'
           className='w-100 mt-3'

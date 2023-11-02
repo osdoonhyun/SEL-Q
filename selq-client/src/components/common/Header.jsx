@@ -13,7 +13,6 @@ import {
   faStar,
 } from '@fortawesome/free-solid-svg-icons';
 import { faBookmark } from '@fortawesome/free-regular-svg-icons';
-
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -24,7 +23,8 @@ import FontSizeSettings from '../ui/FontSizeSettings';
 import MenuOffcanvas from './MenuOffcanvas';
 import { useDispatch } from 'react-redux';
 import { logOut } from '../../store/Slices/auth';
-import useAuth from '../../hooks/useAuth';
+import useAuth from '../../hooks/common/useAuth';
+import { MAIN, GREYS } from '../../styles/variables';
 
 function isPathMatch(targetPath, currentPath) {
   if (targetPath === '/') {
@@ -53,7 +53,10 @@ const NavItem = ({ href, icon, text }) => {
         $isActive={isActive}
       />
       <span
-        style={{ fontSize: '15px', color: isActive ? '#5BACEE' : '#B3B3B5' }}
+        style={{
+          fontSize: '15px',
+          color: isActive ? MAIN.MEDIUM : GREYS.MEDIUM,
+        }}
       >
         {text}
       </span>
@@ -97,9 +100,9 @@ export default function Header() {
               as={Link}
               to='/'
               style={{
-                fontSize: '26px',
+                fontSize: '30px',
                 fontWeight: '600',
-                color: '#5bacee',
+                color: MAIN.MEDIUM,
               }}
             >
               Sel-Q
@@ -188,14 +191,14 @@ export default function Header() {
                 <div className='d-flex justify-content'>
                   <Button
                     onClick={() => navigate('/login')}
-                    style={{ color: '#B3B3B5' }}
+                    style={{ color: GREYS.MEDIUM }}
                     variant='Light'
                   >
                     로그인
                   </Button>
                   <Button
                     onClick={() => navigate('/signup')}
-                    style={{ color: '#B3B3B5' }}
+                    style={{ color: GREYS.MEDIUM }}
                     variant='Light'
                   >
                     회원가입
@@ -212,7 +215,7 @@ export default function Header() {
         <Row>
           <Col className='d-flex justify-content-start'>
             <Button onClick={handleShowOffcanvas} variant='light'>
-              <FontAwesomeIcon color='#B3B3B5' icon={faBars} size='xl' />
+              <FontAwesomeIcon color={GREYS.MEDIUM} icon={faBars} size='xl' />
             </Button>
           </Col>
           <Col>
@@ -224,9 +227,9 @@ export default function Header() {
                 justifyContent: 'center',
                 alignItems: 'center',
                 padding: '5px 0',
-                fontSize: '28px',
+                fontSize: '26px',
                 fontWeight: '600',
-                color: '#5bacee',
+                color: MAIN.MEDIUM,
               }}
             >
               Sel-Q
