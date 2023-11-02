@@ -16,10 +16,10 @@ services:
   react-app-1:
     build: selq-client
     container_name: react-app-1
-    ports:
-      - 3000:3000
-    # expose:
-    #   - 3000
+    expose:
+      - 3000
+    # ports:
+    #   - 3000:3000
 
   react-app-backend:
     build: selq-server
@@ -28,7 +28,7 @@ services:
     env_file:
       - ./selq-server/.env
     command: npm run start:dev
-    ports:
-      - 8000:8000
-    # expose:
-    #   - 8000
+    expose:
+      - 8000
+    # ports:
+    #   - 8000:8000
