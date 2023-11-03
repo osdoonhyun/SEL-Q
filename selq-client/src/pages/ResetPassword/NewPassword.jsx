@@ -55,6 +55,7 @@ export default function NewPassword() {
               <Form.Control
                 style={{ height: '50px', width: '330px' }}
                 value={field.value}
+                type='password'
                 placeholder='새 비밀번호'
                 onChange={(e) => {
                   setValue('password', e.target.value);
@@ -77,7 +78,7 @@ export default function NewPassword() {
                   setValue('confirmPassword', e.target.value);
                   field.onChange(e);
                 }}
-                // type='password'
+                type='password'
                 placeholder='새 비밀번호 확인'
               />
             )}
