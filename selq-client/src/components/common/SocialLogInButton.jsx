@@ -4,6 +4,7 @@ import Google from '../../assets/icon/oauth/google.svg';
 import { getCookie } from '../../config/cookie';
 import { GREYS } from '../../styles/variables';
 import { serverApi } from '../../apis/api';
+import { POPUP_STRING } from '../../constant/options';
 
 export default function SocialLogInButton() {
   const navigate = useNavigate();
@@ -27,15 +28,17 @@ export default function SocialLogInButton() {
 
   const socialLogin = () => {
     const popup = window.open(
-      'http://localhost:8000/api/auth/google',
+      // 'http://localhost:8000/api/auth/google',
+      'https://selq.store/api/auth/google',
       'Google Login',
-      'width=400,height=500'
+      POPUP_STRING
     );
 
     const receiveLoginCompleteMessage = async (event) => {
       console.log('EVENT', event);
       if (
-        event.origin === 'http://localhost:8000' &&
+        // event.origin === 'http://localhost:8000' &&
+        event.origin === 'https://selq.store' &&
         event.data === 'loginComplete'
       ) {
         popup.close();
