@@ -163,7 +163,8 @@ export class AuthController {
     await this.usersService.setCurrentRefreshToken(refreshToken, user.id);
 
     res.setHeader('Set-Cookie', [accessTokenCookie, refreshTokenCookie]);
-    const mainPageUrl = 'http://localhost:3000';
+    // const mainPageUrl = 'http://localhost:3000';
+    const mainPageUrl = 'https://selq.store';
     res.send(
       `<script>window.opener.postMessage('loginComplete', '${mainPageUrl}');window.close();</script>`,
     );
