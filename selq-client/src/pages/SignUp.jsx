@@ -1,21 +1,23 @@
-import { Container, Form, Row, Col, Button, Spinner } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
-import { TERMS_AND_CONDITIONS, EMAIL_LIST } from '../constant/signUp';
 import { useNavigate } from 'react-router-dom';
+import { Container, Form, Row, Col } from 'react-bootstrap';
 import { Controller, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { ErrorMessage } from '../styles/Styles';
-import Timer from '../components/ui/Timer';
-import SocialLogInButton from '../components/common/SocialLogInButton';
-import { MAIN, GREYS } from '../styles/variables';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { useSignUpHandler } from '../hooks/common/useSignUpHandler';
 import { useCheckRegisteredEmail } from '../hooks/common/useCheckRegisteredEmail';
 import { useSendVerificationCode } from '../hooks/common/useSendVerificationCode';
 import { useCheckVerificationCode } from '../hooks/common/useCheckVerificationCode';
+import { ErrorMessage } from '../styles/Styles';
+import { TERMS_AND_CONDITIONS, EMAIL_LIST } from '../constant/signUp';
+import Timer from '../components/Timer';
+import SocialLogInButton from '../components/button/SocialLogInButton';
+import PasswordInputGroup from '../components/PasswordInputGroup';
+import { MAIN, GREYS } from '../styles/variables';
 import { REGEXP } from '../constant/regexp';
 import { MESSAGE } from '../constant/message';
-import PasswordInputGroup from '../components/common/PasswordInputGroup';
+import { NextButton } from '../styles/ButtonStyles';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 const signUpSchema = yup.object().shape({
   email: yup.string().required(MESSAGE.SIGNUP.VALIDATION_EMAIL),
@@ -66,29 +68,16 @@ export default function SignUp() {
   const email = watch('email');
   const emailCategory = watch('emailCategory');
 
-  const {
-    mutateAsync: signUp,
-    isLoading: loadingSignUp,
-    error: errorSignUp,
-  } = useSignUpHandler();
+  const { mutateAsync: signUp, isLoading: loadingSignUp } = useSignUpHandler();
 
-  const {
-    mutateAsync: verifyEmail,
-    isLoading: loadingVerifyEmail,
-    error: errorVerifyEmail,
-  } = useCheckRegisteredEmail();
+  const { mutateAsync: verifyEmail, isLoading: loadingVerifyEmail } =
+    useCheckRegisteredEmail();
 
-  const {
-    mutateAsync: sendEmail,
-    isLoading: loadingSendEmail,
-    error: errorSendEmail,
-  } = useSendVerificationCode();
+  const { mutateAsync: sendEmail, isLoading: loadingSendEmail } =
+    useSendVerificationCode();
 
-  const {
-    mutateAsync: checkEmail,
-    isLoading: loadingCheckEmail,
-    error: errorCheckEmail,
-  } = useCheckVerificationCode();
+  const { mutateAsync: checkEmail, isLoading: loadingCheckEmail } =
+    useCheckVerificationCode();
 
   const signUpHandler = async (values, e) => {
     e.preventDefault();
@@ -149,6 +138,7 @@ export default function SignUp() {
   const handleAgreeCheckList = (e, field, setFieldValue) => {
     const { value, checked } = e.target;
 
+    console.log('클릭됨 ', value, checked);
     if (value === MESSAGE.SIGNUP.TOTAL_AGREE) {
       let tempAgree = agreeList.map((agree) => ({
         ...agree,
@@ -229,38 +219,19 @@ export default function SignUp() {
           <ErrorMessage>{errors.email?.message}</ErrorMessage>
         </Form.Group>
 
-        <Button
-          variant='Light'
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            width: '127px',
-            height: '38px',
-            backgroundColor: MAIN.DARK,
-            border: `1px solid ${MAIN.DARK}`,
-            color: GREYS.LIGHTER,
-          }}
+        <NextButton
           onClick={verifyRegisteredEmailHandler}
-          className='mb-3'
+          className='d-flex justify-content-center align-items-center mb-3'
           disabled={btnDisable || !verificationBtnDisable}
         >
           {loadingVerifyEmail || loadingSendEmail ? (
-            <>
-              <Spinner
-                animation='border'
-                size='sm'
-                role='status'
-                aria-hidden='true'
-              />
-              <span className='visually-hidden'>Loading...</span>
-            </>
+            <LoadingSpinner />
           ) : verificationBtnDisable ? (
             '이메일 인증하기'
           ) : (
             '이메일 인증완료'
           )}
-        </Button>
+        </NextButton>
 
         {isVerifiedEmail && (
           <Form.Group className='mb-3' controlId='formEmailVerification'>
@@ -286,30 +257,12 @@ export default function SignUp() {
             </div>
             <Timer key={timerRestart} />
 
-            <Button
+            <NextButton
               className='mt-3'
-              variant='Light'
-              style={{
-                backgroundColor: MAIN.DARK,
-                border: `1px solid ${MAIN.DARK}`,
-                color: GREYS.LIGHTER,
-              }}
               onClick={checkEmailVerificationHandler}
             >
-              {loadingCheckEmail ? (
-                <>
-                  <Spinner
-                    animation='border'
-                    size='sm'
-                    role='status'
-                    aria-hidden='true'
-                  />
-                  <span className='visually-hidden'>Loading...</span>
-                </>
-              ) : (
-                '확인'
-              )}
-            </Button>
+              {loadingCheckEmail ? <LoadingSpinner /> : '확인'}
+            </NextButton>
           </Form.Group>
         )}
 
@@ -324,6 +277,7 @@ export default function SignUp() {
             name='password'
             placeholder='비밀번호'
           />
+
           <ErrorMessage>{errors.password?.message}</ErrorMessage>
         </Form.Group>
 
@@ -334,6 +288,7 @@ export default function SignUp() {
             name='confirmPassword'
             placeholder='비밀번호 확인'
           />
+
           <ErrorMessage>{errors.confirmPassword?.message}</ErrorMessage>
         </Form.Group>
 
@@ -364,6 +319,7 @@ export default function SignUp() {
               render={({ field }) => (
                 <Form.Check
                   type='checkbox'
+                  id='all'
                   label='전체 동의 (선택항목에 대한 동의 포함)'
                   value='전체 동의'
                   checked={
@@ -385,6 +341,7 @@ export default function SignUp() {
                   render={({ field }) => (
                     <Form.Check
                       type='checkbox'
+                      id={agree.label}
                       onChange={(e) => handleAgreeCheckList(e, field, setValue)}
                       checked={field.value || agree.isChecked}
                       label={agree.label}
@@ -402,30 +359,9 @@ export default function SignUp() {
           )}
         </Form.Group>
 
-        <Button
-          variant='Light'
-          style={{
-            backgroundColor: MAIN.DARK,
-            border: `1px solid ${MAIN.DARK}`,
-            color: GREYS.LIGHTER,
-          }}
-          type='submit'
-          className='w-100 mt-3'
-        >
-          {loadingSignUp ? (
-            <>
-              <Spinner
-                animation='border'
-                size='sm'
-                role='status'
-                aria-hidden='true'
-              />
-              <span className='visually-hidden'>Loading...</span>
-            </>
-          ) : (
-            '회원가입'
-          )}
-        </Button>
+        <NextButton type='submit' className='w-100 mt-3'>
+          {loadingSignUp ? <LoadingSpinner /> : '회원가입'}
+        </NextButton>
       </Form>
 
       <p className='mt-3' style={{ textAlign: 'center' }}>
