@@ -14,7 +14,7 @@ services:
       - react-app-backend
 
   react-app-1:
-    build: selq-client
+    image: selq-client:latest
     container_name: react-app-1
     expose:
       - 3000
