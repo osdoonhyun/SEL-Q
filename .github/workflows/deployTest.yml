@@ -31,5 +31,6 @@ jobs:
           password: ${{ secrets.EC2_PASSWORD}}
           script: |
             cd Sel-Q
+            docker compose down
             docker compose pull
             docker compose up -d
