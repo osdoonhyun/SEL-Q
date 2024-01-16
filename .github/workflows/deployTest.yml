@@ -18,9 +18,9 @@ jobs:
           DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
           DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
         run: |
-          docker-compose build
+          docker compose build
           echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
-          docker-compose push
+          docker compose push
 
       - name: SSH into EC2 and Deploy
         uses: appleboy/ssh-action@master
@@ -31,5 +31,5 @@ jobs:
           password: ${{ secrets.EC2_PASSWORD}}
           script: |
             cd Sel-Q
-            docker-compose pull
-            docker-compose up -d
+            docker compose pull
+            docker compose up -d
