@@ -15,7 +15,7 @@ const defaultConfig = {
     'Content-Type': 'application/json',
   },
 };
-console.log('DEFAULT', defaultConfig.baseURL);
+
 // 일반 API
 export const api = axios.create(defaultConfig);
 
