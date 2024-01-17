@@ -20,7 +20,7 @@ jobs:
         run: |
           docker compose build
           echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
-          docker compose push
+          docker compose push osdoonhyun/sel-q
 
       - name: SSH into EC2 and Deploy
         uses: appleboy/ssh-action@master
@@ -32,5 +32,5 @@ jobs:
           script: |
             cd Sel-Q
             docker compose down
-            docker compose pull
+            docker pull osdoonhyun/sel-q
             docker compose up -d
