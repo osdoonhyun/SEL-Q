@@ -16,6 +16,8 @@ services:
   react-app-1:
     build: selq-client # image: selq-client:latest
     container_name: react-app-1
+    env_file:
+      - ./selq-client/.env
     expose:
       - 3000
     # ports:
