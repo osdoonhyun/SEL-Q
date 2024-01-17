@@ -42,3 +42,24 @@ jobs:
           context: ./selq-server # Server Dockerfile이 있는 디렉토리 경로
           push: true
           tags: osdoonhyun/sel-q:server-latest
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: ssh connect & production
+        uses: appleboy/ssh-action@master
+        with:
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          password: ${{ secrets.EC2_PASSWORD}}
+          port: ${{ secrets.EC2_SSH_PORT }}
+          script: |
+            cd Sel-Q
+            docker compose down
+            docker system prune -a --volumes -f
+            docker compose pull -q
+            docker compose up --force-recreate --build -d --quiet-pull 2>log.out
+            cat log.out
