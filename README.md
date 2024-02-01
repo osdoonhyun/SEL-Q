@@ -1,8 +1,8 @@
 <div align="center">
 
-## [Sel-Q, 셀큐 바로가기](https://selq.store)
+### [Sel-Q, 셀큐 바로가기](https://selq.store)
 
-<img alt="logo" src="https://github.com/osdoonhyun/selQ-client/assets/87527736/bf29e34d-7d4b-4ae8-9392-76298db0496a" width="60%"  style="background-color: #f0f0f0; padding-top:10px;">
+<img alt="logo" src="https://github.com/osdoonhyun/selQ-client/assets/87527736/bf29e34d-7d4b-4ae8-9392-76298db0496a" width="484px;" style="background-color: #f0f0f0; padding-top:10px;">
 
 
 </div>
@@ -19,21 +19,21 @@
 
 ### 프론트엔드
 
-<img alt="fronted" src="https://github.com/osdoonhyun/selQ-client/assets/87527736/15c50c71-0163-42c6-9714-277b463912f4" width="80%"  style="background-color: #f0f0f0; padding-top:10px;">
+<img alt="fronted" src="https://github.com/osdoonhyun/selQ-client/assets/87527736/15c50c71-0163-42c6-9714-277b463912f4" width="55%"  style="background-color: #f0f0f0; padding-top:10px;">
 
 ### 백엔드
 
-<img alt="backend" src="https://github.com/osdoonhyun/selQ-client/assets/87527736/fd183d33-aaed-4448-96c5-2f7a4232ef0f" width="80%"  style="background-color: #f0f0f0; padding-top:10px;">
+<img alt="backend" src="https://github.com/osdoonhyun/selQ-client/assets/87527736/fd183d33-aaed-4448-96c5-2f7a4232ef0f" width="55%"  style="background-color: #f0f0f0; padding-top:10px;">
 
 ### 인프라
 
-<img alt="infra" src="https://github.com/osdoonhyun/selQ-client/assets/87527736/653f3602-fc64-4ad2-8f03-e14762c8c120" width="80%"  style="background-color: #f0f0f0; padding-top:10px;">
+<img alt="infra" src="https://github.com/osdoonhyun/selQ-client/assets/87527736/653f3602-fc64-4ad2-8f03-e14762c8c120" width="55%"  style="background-color: #f0f0f0; padding-top:10px;">
 
 <br><br>
 
 ## 🏛️ 인프라 구성도
 
-![selq-deployment](https://github.com/osdoonhyun/selQ-client/assets/87527736/3e61d826-2e23-4667-9876-51828883e3e6)
+<img alt="selq-deployment" src="https://github.com/osdoonhyun/selQ-client/assets/87527736/3e61d826-2e23-4667-9876-51828883e3e6" width="75%"  style="background-color: #f0f0f0; padding-top:10px;">
 
 <br><br>
 
