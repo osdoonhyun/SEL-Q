@@ -1,6 +1,7 @@
 <div align="center">
 
 ### [Sel-Q, 셀큐 바로가기](https://selq.store)
+임시계정(ID: admin@<hi>naver.com / PW: 1234!Admin)<br>
 
 <img alt="logo" src="https://github.com/osdoonhyun/selQ-client/assets/87527736/bf29e34d-7d4b-4ae8-9392-76298db0496a" width="484px;" style="background-color: #f0f0f0; padding-top:10px;">
 
