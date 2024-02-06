@@ -13,14 +13,14 @@ export default function SocialLogInButton() {
 
   const socialLogin = () => {
     const popup = window.open(
-      process.env.REACT_APP_GOOGLE_LOGIN_URL,
+      process.env.REACT_APP_PROD_GOOGLE_LOGIN_URL,
       'Google Login',
       POPUP_STRING
     );
 
     const receiveLoginCompleteMessage = async (event) => {
       if (
-        event.origin === process.env.REACT_APP_ORIGIN_URL &&
+        event.origin === process.env.REACT_APP_PROD_ORIGIN_URL &&
         event.data === 'loginComplete'
       ) {
         popup.close();
