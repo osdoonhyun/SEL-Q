@@ -1,0 +1,26 @@
+name: EC2 Update
+
+on:
+  push:
+    branches: ['main']
+  pull_request:
+    branches: ['main']
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: ssh to ec2
+        uses: appleboy/ssh-action@master
+        with:
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          password: ${{ secrets.EC2_PASSWORD}}
+          script: | # 인스턴스 코드 업데이트
+            cd Sel-Q
+            git pull https://osdoonhyun:${{ secrets.GIT_TOKEN }}@github.com/osdoonhyun/SEL-Q.git
